@@ -1,0 +1,51 @@
+Datasets required:
+	- Datasets\signalisation_stationnement.geojson
+	- Datasets\signalisation_stationnement.csv
+	- Datasets\gbdouble.json
+	- Datasets\gbdouble.csv
+
+All other datasets are generated through running main.ipynb 
+
+
+Frontend:
+	# Run application server
+	- app.py 
+
+Backend:
+	# From required datasets, generate multiple maps. Which would be displayed to the user, for their specific scenario (time & date) 
+	- main.ipynb 
+
+	# generate or update a map
+	- user_can_park_where.py
+
+	# Following 3 scripts, eliminates non-needed fields from datasets
+	- simplify_gbdouble.json.py
+	- simplify_signalisation_stationnement.geojson.py
+	- simplify_signalisation_stationnement.csv.py
+
+	# Following script, updates latitude and longitude coordinates
+	- update_coordinates_in_simplified_signalisation_stationnment.csv.py
+
+	# Following script, generate a dataset that maps sign id to streetside id
+	- map_sign_streetside.py
+
+	# Following script, extract sign rules into signalisation_stationnement_RPA_description.csv
+	- sign_description_RPA_parser.py
+
+	# Following script, combines all datasets together
+	- combine_datasets.py
+
+	# Following script, runs all backend scripts to generate all data required
+	- main.ipynb 
+
+	# Following script, displays on a map, a red dot at each sign's GPS coordinates
+	- display_sign_coordinates.ipynb
+	# Following script, displays on a map, a red dot at each street_sides GPS coordinates
+	- display_street_side_coordinates.ipynb
+
+Tests:
+	# Following script are to be used for testing purposes:
+	- test_*.py
+	- test_coordinates.ipynb: used for testing purposes. Visualize on a map a small set of coordinates
+	- test_split_signalisation_stationnement.geojson.py : used for testing purposes. Splits signalisation dataset into smaller datasets to be used in assigning_sign_streetside.ipynb
+	- create_gbdouble_sample.py : used for testing purposes. Reduces row quantity of gbdouble.

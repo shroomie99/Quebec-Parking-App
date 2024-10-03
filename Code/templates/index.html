@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Parking Near You</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        /* Button Styles */
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #3498db;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Spinner styles */
+        .spinner {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Spinner container */
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            z-index: 1000;
+            visibility: hidden; /* Initially hidden */
+        }
+
+        .spinner-container.show {
+            visibility: visible; /* Show when the button is clicked */
+        }
+
+        /* Page Wrapper */
+        .wrapper {
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <h1>Find Parking Near You</h1>
+        <button onclick="getLocation()">Generate Map</button>
+    </div>
+
+    <!-- Spinner element -->
+    <div id="spinner-container" class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        function getLocation() {
+            // Show the spinner
+            document.getElementById('spinner-container').classList.add('show');
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function sendPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const accuracy = position.coords.accuracy;  // Capture the accuracy
+
+            // Print the accuracy in the browser console for debugging
+            console.log('Sending data:', { latitude, longitude, accuracy });
+
+            // Send coordinates and accuracy to the Flask server
+            fetch('/get_location', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ latitude, longitude, accuracy })  // Include accuracy
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Location sent successfully:', data);
+                // Keep the spinner spinning until the page is ready
+                window.location.href = "/display_map";  // Redirect to the map display page after processing is done
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Hide the spinner in case of error
+                document.getElementById('spinner-container').classList.remove('show');
+            });
+        }
+    </script>
+</body>
+</html>

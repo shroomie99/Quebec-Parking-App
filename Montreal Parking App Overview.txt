@@ -1,0 +1,69 @@
+## Montreal Parking App Overview ##
+
+App Name:
+Montreal Parking App
+
+Goal:
+To assist users in finding free legal parking spots in Montreal based on various criteria.
+
+Brief Description:
+The app uses the vehicle's parking sticker designated zone, among other parameters, to search through a Montreal street parking database. It provides locations where the user can legally park their vehicle.
+
+How It Works:
+- User enters the vehicle's parking sticker designated zone, if available.
+- User allows the app to access their live location.
+- The app displays a map with parking zones:
+   -- Green Zones: Allowed to park
+   -- Red Zones: Not allowed to park
+
+Databases Utilized:
+1) Quebec city street parking (select CSV/geoJSON): https://open.canada.ca/data/en/dataset/9c11aab8-419c-4a7e-8bdc-95b5395a9f32 
+
+2) Montreal street parking signs (Select only the "Signalisation- Stationnement" file in format CSV/geoJSON): https://donnees.montreal.ca/dataset/stationnement-sur-rue-signalisation-courant
+
+3) Montreal street sides (Select only the CSV/JSON dataset)
+ https://donnees.montreal.ca/dataset/geobase-double
+
+
+User Input Parameters:
+- Current date and time 
+- User's current location (via GPS)
+- Parking duration
+- Parking sticker designated zone (if applicable)
+
+Transformations:
+The app will process the input parameters against the street parking databases to determine legal parking spots.
+
+In the Montreal street parking dataset. 
+- identify the sign's position (from latitude & longitude)
+- direction sign points on a street side (from position_pop)
+- identify signs restrictions (regarding date, time, parking duration) for non-resident's
+- identify signs allowances for holders of a specific zone residents-only parking sticker (regarding date, time, parking duration)
+- if sign is still active
+
+Transformation output:
+- 2 latitude & longitude coordinates for permissible zones * (quantity of times this happens)
+
+Output:
+A map indicating permissible parking areas based on the user's provided criteria.
+
+Additional Notes:
+The app requires internet connectivity to access real-time data and GPS for location tracking. It aims to simplify the parking experience in Montreal, taking into account the complex parking regulations of the city.
+
+Future features:
+- Provide option for users to see only free parking spots OR both free & paid parking spots.
+- process correctly curved street (i.e. streets with multiple edges), currently treated as a straight line
+- parse sign RPA dataset for max parking duration permitted 
+- Add sign rules from signs identified by : "rule_type : Impact sign directly above" to parent sign. Parent sign can be found by using POTEAU_ID_POT (needs same ID) and POSITION_POP (needs to be either 1 below or above the identified sign). 
+
+
+Example cases:
+1) 14h,01-10-2024, 45.574396,-73.54696, greater than 4 hours, none
+2) 6h, 01-10-2024, 45.574396,-73.54696, less than 4 hours, 22
+any) 30 minuture intervals, 15 days intervals, random coordinates, greater or less than 4 hours, zone 1 to 100 
+
+Market research (alternative companies that provide parking details):
+Parkopedia - https://en.parkopedia.ca/parking/locations/montreal_quebec_canada_008bf25dvgs55pz698/?country=ca&arriving=202312232030&leaving=202312232230
+AI Project - https://www.kaggle.com/datasets/mnabaee/mtlstreetparking/data
+Parking Usher - https://www.parkusher.app/
+

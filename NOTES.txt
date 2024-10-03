@@ -1,0 +1,15 @@
+NOTE:
+(1)
+COTE: Droite = ODD house 
+COTE: Gauche = EVEN house
+
+(2)
+coordinates of street are a vector from smallest to largest address. 
+
+==
+Use knowledge of ODD and EVEN houses && that coordinates are an address vector -> to find the coordinate that is perpendicular left to the street.
+
+How to identify whether a street will rise or fall in numbers?
+
+Limitations:
+COTE and SENS_CIR cant be used to identify which coordinate is perpendicular left. 

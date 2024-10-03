@@ -1,0 +1,28 @@
+Product Manager Request:
+Create a webapp in Python called "Montreal Parking App". This app assists users in finding free legal parking spots in Montreal based on various criteria.
+
+Inputs: Current date and time, user's current location, user's desired parking duration, user's residents-only parking sticker (if available).
+
+Use the dataset attached to generate a map of permitted and restricted car parking zones given the user's input. 
+
+Restricted zones per street side are determined by location of sign post, rules each sign applies to at a given sign post, direction(s) the street sign applies to, the region of street the sign rules applies to, and termination points of sign rules.
+
+Street signs rules are accumulative. Termination point of a or many street sign are either at the end of the street or at an opposing FLECHE_PAN (in this case: 2 is the opposite value of 3; 3 is the opposite value of 2)
+
+Permitted car parking zones are the exact opposite of restricted zones. 
+
+Dataset field definitions:
+- unique identifier per sign = PANNEAU_ID_PAN
+- unique identifier per post = POTEAU_ID_POT
+- free street parking = DESCRIPTION_CAT : STATIONNEMENT
+- active signs = DESCRIPTION_REP : Réel
+- sign location = geometry[coordinates]
+- direction street sign applies to on a single street side = FLECHE_PAN
+-- when FLECHE_PAN is 0,8,11,18; rules applies to both sides of sign
+-- when FLECHE_PAN is 2; when looking from POV of building to street, rules applies to right of sign
+-- when FLECHE_PAN is 3; when looking from POV of building to street, rules applies to left of sign
+- restriction rules of each sign = DESCRIPTION_RPA
+-- contains multiple restriction types to be explained later
+
+
+Output: Display to the user a map of permitted street car parking zones around their current location, to a radius of 1 km. On the map displayed, permitted street car parking zones are to be viewed in green,  restricted street car parking zones are to be viewed in red, and if it's unknown whether a car can park in a zone, display it as grey.

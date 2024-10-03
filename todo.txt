@@ -1,0 +1,7 @@
+TODOs:
+X - Create UI for frontend
+- Display it on a public website
+- Make each streetside either: green, yellow, and red zones in map. 
+    Where green = (can park everywhere on street), yellow = (some parking spots available), red = (no spots available)
+- Improve streetedge quality by ...
+- Improve data quality by ...
