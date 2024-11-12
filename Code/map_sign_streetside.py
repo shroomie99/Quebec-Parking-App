@@ -4,6 +4,11 @@ import geopandas as gpd
 from shapely.geometry import Point
 import json
 
+from pathlib import Path
+
+# Find the project root by navigating up from the current script's directory
+project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
+
 def load_geojson(file_path):
     return gpd.read_file(file_path)
 
@@ -36,9 +41,10 @@ def find_nearest_street_side(sign_point, street_sides, street_sindex):
     return nearest_id
 
 # Load the data
-street_sides_file = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_gbdouble.json'  # Replace with your file path
-signs_file = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_signalisation_stationnement.geojson'  # Replace with your file path
-output_csv_file = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\sign_to_street_side_mapping.csv'  # Replace with your desired output path
+
+street_sides_file = project_root / "Datasets" / "simplified_gbdouble.json"
+signs_file = project_root / "Datasets" / "simplified_signalisation_stationnement.geojson"
+output_csv_file = project_root / "Datasets" / "sign_to_street_side_mapping.csv"
 # output_pkl_file =  r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\sign_to_street_side_mapping.pkl'  # Replace with your desired output path
 
 street_sides = load_geojson(street_sides_file)

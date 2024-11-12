@@ -11,13 +11,19 @@
 
 import pandas as pd
 import json
+from pathlib import Path
 
+# Find the project root by navigating up from the current script's directory
+project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
+
+# Specify the path to your CSV file
+csv_file_path = project_root / "Datasets" / "signalisation_stationnement.csv"  
 # 1) Append sign_to_street_side_mapping.csv to simplified_signalisation_stationnement.csv into file combined_datasets.csv
 
 # Paths to your CSV files
-mapping_csv_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\sign_to_street_side_mapping.csv'  
-simplified_csv_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_signalisation_stationnement.csv'  
-output_csv_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\combined_datasets.csv'  
+mapping_csv_path = project_root / "Datasets" / "sign_to_street_side_mapping.csv"  
+simplified_csv_path = project_root / "Datasets" / "simplified_signalisation_stationnement.csv"  
+output_csv_path = project_root / "Datasets" / "combined_datasets.csv"  
 
 # Load the data from both CSV files into DataFrames
 mapping_data = pd.read_csv(mapping_csv_path)
@@ -53,7 +59,7 @@ print(f"Columns names replaced in CSV")
 # 3) Replace coordinates from simplified_gbdouble.json into the coordinate columns in combined_datasets.csv
 
 # Path to the JSON file
-json_file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_gbdouble.json'  # Replace with the actual path to your JSON file
+json_file_path = project_root / "Datasets" / "simplified_gbdouble.json"  
 
 # Load the JSON file
 with open(json_file_path, 'r') as file:

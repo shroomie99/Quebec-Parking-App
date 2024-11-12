@@ -18,6 +18,15 @@ import csv
 import numpy as np
 from datetime import datetime, timedelta, time
 
+from pathlib import Path
+
+# Find the project root by navigating up from the current script's directory
+project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
+
+# Specify the path to your CSV file
+csv_file_path = project_root / "Datasets" / "signalisation_stationnement.csv"  
+
+
 def is_between_tuples(input_value, tuple1, tuple2):
     x, y = input_value
     x1, y1 = tuple1
@@ -201,8 +210,8 @@ def calculate_legal_parking_areas(df_whole):
 
 def execute_me(scenario_file_csv_path, tmp_scenario_date, tmp_scenario_time):
     ## Logic to find and generate a .txt of legal parking spaces for an individual scenario ##
+    combined_datasets_csv_path = project_root / "Datasets" / "combined_datasets.csv"  
 
-    combined_datasets_csv_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\combined_datasets.csv' 
     scenario_file_csv_path = scenario_file_csv_path
 
     # Load the data from CSV files into DataFrames
@@ -256,7 +265,8 @@ def execute_me(scenario_file_csv_path, tmp_scenario_date, tmp_scenario_time):
 
     # Generate unique time and date based file name
     file_name = f"map_{tmp_scenario_date}__{tmp_scenario_time}.txt"
-    output_file_path = rf'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\maps\{file_name}'
+    
+    output_file_path = project_root / "Datasets" / "maps" / file_name
 
     # Write the raw contents of the list to the file without modification
     with open(output_file_path, 'w') as file:
@@ -273,7 +283,7 @@ def main():
     import re
 
     # Define the folder path
-    folder_path = r"C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\scenarios"
+    folder_path = project_root / "Datasets" / "scenarios"  
 
     # Define a regular expression pattern to extract scenario_date and scenario_time
     pattern = r'scenarios_sign_active_(\d{4}-\d{2}-\d{2})_(\d{2}-\d{2})\.csv'
@@ -289,8 +299,8 @@ def main():
             print(f"File: {filename}")
             print(f"Scenario Date: {scenario_date}")
             print(f"Scenario Time: {scenario_time}\n")
-
-            scenario_path = rf'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\scenarios\scenarios_sign_active_{scenario_date}_{scenario_time.replace(":", "-")}.csv'
+            
+            scenario_path = project_root / "Datasets" / "scenarios" / f"scenarios_sign_active_{scenario_date}_{scenario_time.replace(':', '-')}.csv"
             execute_me(scenario_path, scenario_date, scenario_time)
         else:
             print(f"File {filename} does not match the expected pattern.\n")

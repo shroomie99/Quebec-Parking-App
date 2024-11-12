@@ -8,8 +8,14 @@ import pandas as pd
 import json
 import time
 
+from pathlib import Path
+
+# Find the project root by navigating up from the current script's directory
+project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
+
+
 # Load sample_user_input
-combined_datasets_csv_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\combined_datasets.csv'
+combined_datasets_csv_path = project_root / "Datasets" / "combined_datasets.csv"
 
 # Load the data from CSV files into DataFrames
 combined_datasets = pd.read_csv(combined_datasets_csv_path)

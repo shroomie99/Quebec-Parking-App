@@ -14,6 +14,12 @@ For each sign_id {PANNEAU_ID_PAN},
 import pandas as pd
 from datetime import datetime, timedelta, time
 
+from pathlib import Path
+
+# Find the project root by navigating up from the current script's directory
+project_root = Path(__file__).resolve().parents[1] 
+
+
 def is_sign_active(scenario_date, scenario_time, resident_parking, day_of_week, time_of_day, date_period_active):
     """
     Determine if a sign is active based on the given scenario date, time, and parking conditions.
@@ -276,7 +282,7 @@ def generate_multiple_scenarios(combined_datasets):
                 
                 # Generate results for each scenario
                 df = generate_single_scenario(combined_datasets, scenario_date, scenario_time)
-                filename = rf'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\scenarios\scenarios_sign_active_{scenario_date}_{scenario_time.replace(":", "-")}.csv'
+                filename = project_root / "Datasets" / "scenarios" / f"scenarios_sign_active_{scenario_date}_{scenario_time.replace(':', '-')}.csv"
                 df.to_csv(filename, index=False)
                 print('1')
             print('2')    
@@ -289,7 +295,7 @@ def generate_multiple_scenarios(combined_datasets):
 def main():
 
     # Load sample_user_input
-    combined_datasets_csv_path = r'C:\\Users\\Benjamin\\Desktop\\Python Projects\\Quebec Parking App\\Datasets\\combined_datasets.csv' 
+    combined_datasets_csv_path = project_root / "Datasets" / "combined_datasets.csv"
 
     # Load the data from CSV files into DataFrames
     combined_datasets = pd.read_csv(combined_datasets_csv_path)
