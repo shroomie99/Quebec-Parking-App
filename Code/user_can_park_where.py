@@ -34,6 +34,7 @@ file_path = base_dir / 'Datasets' / 'montreal_highlighted_map.html'
 ## (1) Identify file to load, using user_input
 # Get the current date and time in proper format
 
+project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
 
 # Function to get the first occurrence of the same weekday in the month
 def get_date(now):
@@ -77,10 +78,7 @@ print(scenario_time)
 
 ## Load the Coordinates ##
 # Specify the path to the .txt file
-input_file_path = rf'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\maps\map_{scenario_date}__{scenario_time}.txt'
-print(input_file_path)
-
-# input_file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\maps\map_2024-01-01__06-00.txt'
+input_file_path = project_root / "Datasets" / "maps" / f"map_{scenario_date}__{scenario_time}.txt"
 
 # Read the contents of the file
 with open(input_file_path, 'r') as file:

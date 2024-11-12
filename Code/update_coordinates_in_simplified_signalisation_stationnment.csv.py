@@ -1,8 +1,13 @@
 import pandas as pd
 import json
 
+from pathlib import Path
+
+# Find the project root by navigating up from the current script's directory
+project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
+
 # Load the JSON file
-json_file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_signalisation_stationnement.geojson'  # Replace with the path to your JSON file
+json_file_path = project_root / "Datasets" / "simplified_signalisation_stationnement.geojson"  
 with open(json_file_path, 'r') as file:
     json_data = json.load(file)
 
@@ -17,7 +22,7 @@ json_df = pd.DataFrame({
 })
 
 # Specify the path to your CSV file
-csv_file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_signalisation_stationnement.csv'  # Replace with the path to your CSV file
+csv_file_path = project_root / "Datasets" / "simplified_signalisation_stationnement.csv"  
 
 # Read the CSV file into a DataFrame
 csv_data = pd.read_csv(csv_file_path)
@@ -33,7 +38,7 @@ updated_csv_data['Latitude'] = updated_csv_data['Latitude_y']
 updated_csv_data.drop(columns=['Longitude_x', 'Latitude_x', 'Longitude_y', 'Latitude_y'], inplace=True)
 
 # Export the updated DataFrame to a new CSV file
-updated_csv_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_signalisation_stationnement.csv'  # Replace with the desired path for the updated CSV file
+updated_csv_path = project_root / "Datasets" / "simplified_signalisation_stationnement.csv"  
 updated_csv_data.to_csv(updated_csv_path, index=False)
 
 print(f'Coordinates updated in CSV, simplified_signalisation_stationnement.csv')

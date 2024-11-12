@@ -13,6 +13,15 @@ import pandas as pd
 import re
 import unicodedata
 
+from pathlib import Path
+
+# Find the project root by navigating up from the current script's directory
+project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
+
+# Construct the path to the target file
+          
+# Load the GeoJSON file
+
 ## HELPER properties or functions ##
 
 # Combine lists of French month and day abbreviations
@@ -285,7 +294,7 @@ def find_special_conditions(description):
 
 ### MAIN ###
 # Load the dataset
-file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_signalisation_stationnement.csv'  
+file_path = project_root / "Datasets" / "simplified_signalisation_stationnement.csv"  
 # file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\signalisation-codification-rpa.csv' # for testing purposes
 df = pd.read_csv(file_path, encoding='utf-8')
 
@@ -311,7 +320,7 @@ df['resident_parking'] = df['DESCRIPTION_RPA'].apply(find_resident_parking)
 df['special_conditions'] = df['DESCRIPTION_RPA'].apply(find_special_conditions)
 
 # Save the updated dataframe to a new CSV file
-updated_file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_signalisation_stationnement.csv'  
+updated_file_path = project_root / "Datasets" / "simplified_signalisation_stationnement.csv"  
 # updated_file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\signalisation-codification-rpa.csv' # for testing purposes
 df.to_csv(updated_file_path, index=False)
 

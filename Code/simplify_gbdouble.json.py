@@ -1,7 +1,15 @@
 import json
+import os
 
+from pathlib import Path
+
+# Find the project root by navigating up from the current script's directory
+project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
+
+# Construct the path to the target file
+          
 # Load the GeoJSON file
-input_file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\gbdouble.json'  # Replace with the path to your GeoJSON file
+input_file_path = project_root / "Datasets" / "gbdouble.json"  
 with open(input_file_path, 'r') as file:
     data = json.load(file)
 
@@ -19,7 +27,7 @@ for feature in data['features']:
 
 
 # Save the modified data to a new GeoJSON file
-output_file_path = r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\simplified_gbdouble.json'  # Replace with your desired output path
+output_file_path = project_root / "Datasets" / "simplified_gbdouble.json"  
 with open(output_file_path, 'w') as file:
     json.dump(data, file, indent=4)
 
