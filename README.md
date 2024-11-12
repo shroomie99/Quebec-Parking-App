@@ -22,13 +22,14 @@ To Run App:
 - main.ipynb : to generate street parking data for application
 
 Datasets required to run main.ipynb:
-	- Datasets\signalisation_stationnement.geojson
-	- Datasets\signalisation_stationnement.csv
-	- Datasets\gbdouble.json
-	- Datasets\gbdouble.csv
+- Datasets\signalisation_stationnement.geojson
+- Datasets\signalisation_stationnement.csv
+- Datasets\gbdouble.json
+- Datasets\gbdouble.csv
 
 Required datasets are obtained here: 
-1) Montreal street parking signs (Select only the "Signalisation- Stationnement" file in format CSV/geoJSON): https://donnees.montreal.ca/dataset/stationnement-sur-rue-signalisation-courant
+1) Montreal street parking signs (Select only the "Signalisation- Stationnement" file in format CSV/geoJSON): 
+https://donnees.montreal.ca/dataset/stationnement-sur-rue-signalisation-courant
 
 2) Montreal street sides (Select only the CSV/JSON dataset):
- https://donnees.montreal.ca/dataset/geobase-double
+https://donnees.montreal.ca/dataset/geobase-double
