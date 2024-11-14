@@ -20,7 +20,6 @@ columns_to_keep = ['POTEAU_ID_POT','POSITION_POP','PANNEAU_ID_PAN',  'DESCRIPTIO
 # Select only the specified columns
 data = data[columns_to_keep]
 
-output_csv_path = project_root / "Datasets" / "simplified_signalisation_stationnement.csv"  
 
 # Optionally, save the reduced DataFrame to a new CSV file
 output_csv_path = project_root / "Datasets" / "simplified_signalisation_stationnement.csv"  
