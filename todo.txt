@@ -1,7 +1,31 @@
 TODOs:
-X - Create UI for frontend
-- Display it on a public website
+- Investigate and document issues with data quality regarding areas that are marked as CAN PARK.
+* (priority1) mapping data is not cancelling each other out properly in algo and its overlapping on each other. Makes me think all data lines are not being processed unless datapoint is exactly the same. 
+-- update code: identify_regions_legal_to_park.py
+
+* Generate logic to add signs with rule_type "pannonceau" and "unknown" from code sign_description_RPA_parser.py to update file   simplified_signalisation_stationnement.csv 
+* generalize output from identify_regions_legal_to_park.py with green, yellow, red area segments. 
+- evaluate difference between actual/produced data
+- why the overlap of lines?
+
+
+
+
+E.g.:
+	- real sign data does not correspond to visualized data
+	- overlapping CAN PARK lines on map
+	- CAN PARK lines crossing - starting on one street-edge and finishing on the other street-edge. 
+
+
 - Make each streetside either: green, yellow, and red zones in map. 
     Where green = (can park everywhere on street), yellow = (some parking spots available), red = (no spots available)
-- Improve streetedge quality by ...
-- Improve data quality by ...
+
+
+
+Future tasks: - Display it on a public website 
+	- pick a domain name
+	- hosting website
+	- overcome challenge of hosting large datasets
+	- Only if needed by hosting website} - compress Datasets/maps using ZSTD, will reduce file size by 66%.
+
+
