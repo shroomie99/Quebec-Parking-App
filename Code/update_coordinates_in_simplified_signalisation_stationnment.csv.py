@@ -7,7 +7,7 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
 
 # Load the JSON file
-json_file_path = project_root / "Datasets" / "simplified_signalisation_stationnement.geojson"  
+json_file_path = project_root / "Datasets" / "simplified_signalisation_stationnement.json"  
 with open(json_file_path, 'r') as file:
     json_data = json.load(file)
 

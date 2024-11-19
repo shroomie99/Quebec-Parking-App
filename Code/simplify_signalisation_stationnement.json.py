@@ -6,7 +6,7 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
 
 # Load the GeoJSON file
-input_file_path = project_root / "Datasets" / "signalisation_stationnement.geojson"  
+input_file_path = project_root / "Datasets" / "signalisation_stationnement.json"  
 with open(input_file_path, 'r') as file:
     data = json.load(file)
 
@@ -24,7 +24,7 @@ for feature in data['features']:
 
 
 # Save the modified data to a new GeoJSON file
-output_file_path = project_root / "Datasets" / "simplified_signalisation_stationnement.geojson"  
+output_file_path = project_root / "Datasets" / "simplified_signalisation_stationnement.json"  
 with open(output_file_path, 'w') as file:
     json.dump(data, file, indent=4)
 

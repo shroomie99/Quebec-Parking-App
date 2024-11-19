@@ -43,7 +43,7 @@ def find_nearest_street_side(sign_point, street_sides, street_sindex):
 # Load the data
 
 street_sides_file = project_root / "Datasets" / "simplified_gbdouble.json"
-signs_file = project_root / "Datasets" / "simplified_signalisation_stationnement.geojson"
+signs_file = project_root / "Datasets" / "simplified_signalisation_stationnement.json"
 output_csv_file = project_root / "Datasets" / "sign_to_street_side_mapping.csv"
 # output_pkl_file =  r'C:\Users\Benjamin\Desktop\Python Projects\Quebec Parking App\Datasets\sign_to_street_side_mapping.pkl'  # Replace with your desired output path
 
