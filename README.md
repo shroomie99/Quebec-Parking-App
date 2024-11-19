@@ -18,6 +18,7 @@ How It Works:
    -- Red Zones: Not allowed to park
 
 To Run App:
+- setup.py : to install all dependencies
 - app.py : to run application
 - main.ipynb : to generate street parking data for application
 
