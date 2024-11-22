@@ -13,7 +13,7 @@ For each sign_id {PANNEAU_ID_PAN},
 
 import pandas as pd
 from datetime import datetime, timedelta, time
-
+import os
 from pathlib import Path
 
 # Find the project root by navigating up from the current script's directory
@@ -292,6 +292,21 @@ def generate_multiple_scenarios(combined_datasets):
     return scenarios
 
 
+
+def ensure_folder_exists(folder_path):
+    """
+    Check if a folder exists, and create it if it doesn't.
+
+    Args:
+        folder_path (str): Path to the folder.
+    """
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+        print(f"Folder created: {folder_path}")
+    else:
+        print(f"Folder already exists: {folder_path}")
+
+
 def main():
 
     # Load sample_user_input
@@ -299,6 +314,10 @@ def main():
 
     # Load the data from CSV files into DataFrames
     combined_datasets = pd.read_csv(combined_datasets_csv_path)
+
+
+    filename = project_root / "Datasets" / "scenarios"
+    ensure_folder_exists(filename)
 
     # TEST - SINGLE SCENARIO
     # scenario_date = "2024-01-02"

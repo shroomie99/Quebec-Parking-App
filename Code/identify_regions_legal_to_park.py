@@ -7,16 +7,12 @@ Find regions that a vehicle can have legal parking given a scenario (time, date)
 (1) For each scenarios (input variations of date, time). 
     (b) Determine region that is legal to park. 
     Input: scenarios_sign_active.csv + combined_dataset.csv
-    Output: Into a file called: {scenario_time}_{scenario_date}_map.npy. Containing only a list legal parking regions, i.e. [start_coordinate,end_coordinate]
+    Output: Into a file called: {scenario_time}_{scenario_date}_map.txt. Containing only a list legal parking regions, i.e. [start_coordinate,end_coordinate]
 
 """
 
 import pandas as pd
 import ast
-from collections import defaultdict
-import csv
-import numpy as np
-from datetime import datetime, timedelta, time
 
 from pathlib import Path
 
@@ -52,11 +48,16 @@ def initiate_new_bound_in_COTE_RUE_ID(row, legal_parking_areas, current_bounds):
 
     # Update legal_parking_areas with list of valid parking areas from current_bounds
     legal_parking_areas.extend(current_bounds) 
-
+    
     street_start = parse_coordinates(row['street_side_coord1'])
     street_end = parse_coordinates(row['street_side_coord2'])
     sign_start = parse_coordinates(ast.literal_eval(row['sign_effective_area_coordinate1']))
     sign_end = parse_coordinates(ast.literal_eval(row['sign_effective_area_coordinate2']))
+    # print("a", type(street_start))
+    # print("b", type(street_end))
+    # print("c", type(sign_start))
+    # print("d", type(sign_end))
+
     current_bounds = []
 
     # Evalutes whether parking sign is for whole street or not.

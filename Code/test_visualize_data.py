@@ -30,7 +30,14 @@ Code then ...
 
 """
 
-#### (3) ####
+# #### (3) ####
+TODO:
+What is needed -- what am I trying to achieve -- what's my goal?
+Using data, combine_datasets.csv + scenarios_sign_active_2024-01-01_00-00.csv => Generate a complete file that contains:
+-- rows: contain only active signs
+-- columns: contain variety of parameters (TBD)
+Output result into: test_active_signs_and_streets_data.csv
+
 
 import pandas as pd
 import json
@@ -40,6 +47,9 @@ import folium
 from datetime import datetime, timedelta
 
 from pathlib import Path
+
+time_date = "2024-01-01_08-00"
+
 
 
 
