@@ -30,14 +30,6 @@ Code then ...
 
 """
 
-# #### (3) ####
-TODO:
-What is needed -- what am I trying to achieve -- what's my goal?
-Using data, combine_datasets.csv + scenarios_sign_active_2024-01-01_00-00.csv => Generate a complete file that contains:
--- rows: contain only active signs
--- columns: contain variety of parameters (TBD)
-Output result into: test_active_signs_and_streets_data.csv
-
 
 import pandas as pd
 import json
@@ -45,45 +37,122 @@ import time
 import ast
 import folium
 from datetime import datetime, timedelta
-
 from pathlib import Path
 
-time_date = "2024-01-01_08-00"
+# Using data, combine_datasets.csv + scenarios_sign_active_2024-01-01_00-00.csv => Generate a complete file that contains:
+# -- rows: contain only active signs
+# -- columns: contain variety of parameters (TBD) --> 
+# POTEAU_ID_POT, PANNEAU_ID_PAN, DESCRIPTION_RPA, 
+# sign_longitude, sign_latitude, rule_type, street_side_coordinate1_lon, street_side_coordinate1_lat,
+# street_side_coordinate2_lon, street_side_coordinate2_lat, sign_effective_area_coordinate2, 
 
+# Output result into: test_active_signs_and_streets_data.csv
 
+""" 1. To generate data to visualize on map"""
 
-
-
-
-"""Load data"""
-
+# File paths
 project_root = Path(__file__).resolve().parents[1]  # Assumes 'Code' folder is one level deep within project
 
-# Specify the path to the .txt file
-input_file_path_coverage_region = "123" #TODO: Update to correct path
-input_file_path_sign_pairing = "123" #TODO: Update to correct path
+scenarios_sign_active_file = project_root / "Datasets" / "scenarios" / "scenarios_sign_active_2024-01-01_04-00.csv"
+combine_datasets_file =  project_root / "Datasets" / "combined_datasets.csv"
+merged_file =  project_root / "Datasets" / "test_active_signs_and_streets_data.csv"
 
-# Read the contents of the file
-with open(input_file_path_sign_pairing, 'r') as file:
-    signs = file.read()
+# Read the required columns from the files
+scenarios_sign_active = pd.read_csv(scenarios_sign_active_file, usecols=["PANNEAU_ID_PAN"])
+combine_datasets = pd.read_csv(combine_datasets_file, usecols=[
+    "POTEAU_ID_POT", "PANNEAU_ID_PAN", "DESCRIPTION_RPA", 
+    "sign_longitude", "sign_latitude", "rule_type", 
+    "street_side_coordinate1_lon", "street_side_coordinate1_lat", 
+    "street_side_coordinate2_lon", "street_side_coordinate2_lat", 
+    "sign_effective_area_coordinate1", "sign_effective_area_coordinate2"
+])
+
+# Perform the left join
+result = pd.merge(
+    scenarios_sign_active,
+    combine_datasets,
+    how="inner",
+    on="PANNEAU_ID_PAN"
+)
+
+# Save the result to a new CSV file
+result.to_csv(merged_file, index=False)
+
+print(f"Data saved to {merged_file}")
 
 
-# Read the contents of the file
-with open(input_file_path_coverage_region, 'r') as file:
-    content = file.read()
+""" 2. Transform csv data into sub-datasets, that can be processed by mapping sofware"""
+# GOALS:
+# - generate list that contains 1 coordinate or 2 coordinate.
+# - Case 1 (1 coordinate) : contain 1 coordinate and DESCRIPTION_RPA
+# - Case 2 (2 coordinates) : contain 2 coordinates and line color.
 
-# Convert the string back to a list of tuples using ast.literal_eval
-legal_parking_regions = ast.literal_eval(content)
 
-# Swap latitude and longitude for each coordinate
-swapped_parking_regions = [
-    ((lat1, lon1), (lat2, lon2))
-    for ((lon1, lat1), (lon2, lat2)) in legal_parking_regions
+# Given test_active_signs_and_streets_data.csv -> 
+# - generate list that contains 1 coordinate (in acceptable format) and DESCRIPTION_RPA
+#     collect data, transform data, reprovide data
+#         1. Data (columns) collected: sign_longitude, sign_latitude, DESCRIPTION_RPA
+#         2. Provide the following data to add_signs() : [sign_latitude, sign_longitude , DESCRIPTION_RPA]
+
+
+# - generate list that contains 2 coordinates (in acceptable format) and line color
+#         1. Data (columns) collected: street_side_coordinate1_lat, street_side_coordinate1_lon, street_side_coordinate2_lat, street_side_coordinate2_lon, sign_effective_area_coordinate1, sign_effective_area_coordinate2, rule_type
+#         2. Transform data to (
+#             street_side_coord1 = (street_side_coordinate1_lat, street_side_coordinate1_lon)
+#             street_side_coord2 = (street_side_coordinate2_lat, street_side_coordinate2_lon)
+#             sign_effective_area_coord1 = flipped(sign_effective_area_coordinate1)
+#             sign_effective_area_coord2 = flipped(sign_effective_area_coordinate2)
+#         3. Provide the following data to add_line() : [street_side_coord1, street_side_coord2, sign_effective_area_coord1, sign_effective_area_coord2, rule_type ]
+#             Note : 
+#                 if street_side_coord, set line to yellow, 
+#                 if rule_type is "No Parking", set line to red
+#                 if rule_type is "Impact sign directly above", set line to grey
+#                 if rule_type is "Parking Allowed", set line to green
+
+
+# Store lists into test_active_signs_and_streets_transformed.csv
+
+### Case 1 ###
+
+# Load the CSV file
+data = pd.read_csv(merged_file)
+
+# Extract the required columns
+columns_needed = ["sign_latitude", "sign_longitude", "DESCRIPTION_RPA"]
+extracted_data = data[columns_needed]
+
+
+### Case 2 ### 
+
+# Step 2: Extract required columns
+columns_needed = [
+    "street_side_coordinate1_lat", "street_side_coordinate1_lon",
+    "street_side_coordinate2_lat", "street_side_coordinate2_lon",
+    "sign_effective_area_coordinate1", "sign_effective_area_coordinate2", "rule_type"
 ]
 
-coordinate_ranges = swapped_parking_regions
+extracted_data2 = data[columns_needed]
 
-"""Generate map"""
+# Step 3: Transform data
+
+transformed_data = extracted_data2.copy()
+transformed_data.drop(columns=["sign_effective_area_coordinate1", "sign_effective_area_coordinate2"], inplace=True)
+
+transformed_data["street_side_coord1"] = list(zip(
+    extracted_data2["street_side_coordinate1_lat"], extracted_data2["street_side_coordinate1_lon"]
+))
+transformed_data["street_side_coord2"] = list(zip(
+    extracted_data2["street_side_coordinate2_lat"], extracted_data2["street_side_coordinate2_lon"]
+))
+
+transformed_data["sign_effective_area_coord1"] = extracted_data2["sign_effective_area_coordinate1"].apply(
+    lambda x: tuple(reversed(eval(x))) if pd.notna(x) else None
+)
+transformed_data["sign_effective_area_coord2"] = extracted_data2["sign_effective_area_coordinate2"].apply(
+    lambda x: tuple(reversed(eval(x))) if pd.notna(x) else None
+)
+
+""" 3. Generate map"""
 
 # Create a map centered around Montreal
 latitude, longitude = 45.5017, -73.5673
@@ -97,26 +166,12 @@ def add_line(map_obj, coord_start, coord_end, color):
         opacity=0.7
     ).add_to(map_obj)
 
-# Function to add a blue dot at the user's location
-def add_user_location(map_obj, latitude, longitude):
-    folium.CircleMarker(
-        location=[latitude, longitude],
-        radius=7,  # Size of the dot
-        color='blue',  # Blue outline
-        fill=True,
-        fill_color='blue',  # Fill the dot with blue
-        fill_opacity=0.9
-    ).add_to(map_obj)
 
-# Function to add a flag of sign 
-def add_signs(map_obj, latitude, longitude):
-    folium.CircleMarker(
+# Function to add a sign 
+def add_signs(map_obj, latitude, longitude, description):
+    folium.Marker(
         location=[latitude, longitude],
-        radius=7,  # Size of the dot
-        color='red',  # Blue outline
-        fill=True,
-        fill_color='blue',  # Fill the dot with blue
-        fill_opacity=0.9
+        popup=description
     ).add_to(map_obj)
 
 
@@ -125,17 +180,29 @@ def update_map(latitude, longitude):
     # Update the map with the user's location
     map_montreal = folium.Map(location=[latitude, longitude], zoom_start=16)
 
-    # Add the blue dot to represent the user's location
-    add_user_location(map_montreal, latitude, longitude)
+    #TODO: Find error. Location values cannot contain NAN + TypeError: 'float' object is not iterable
+    # - cant find location with NAN
+    # what are my peers in my class doing with there lives now???
 
-    add_signs(map_montreal, signs[0], signs[1])
+    # Add signs to the map
+    for _, row in extracted_data.iterrows():
+        add_signs(map_montreal, row["sign_latitude"], row["sign_longitude"], row["DESCRIPTION_RPA"])
 
-    # Add lines to the map for each coordinate range
-    for start, end, color in coordinate_ranges:
-        add_line(map_montreal, start, end, color)
+    print("183")
+
+    # # Step 5: Add lines to the map
+    # for _, row in transformed_data.iterrows():
+    #     if row["street_side_coord1"] and row["street_side_coord2"]:
+    #         # Add street side line (yellow)
+    #         add_line(map_montreal, row["street_side_coord1"], row["street_side_coord2"], color="yellow")
+    
+    #     if row["sign_effective_area_coord1"] and row["sign_effective_area_coord2"]:
+    #         # Add effective area line (green)
+    #         add_line(map_montreal, row["sign_effective_area_coord1"], row["sign_effective_area_coord2"], color="green")
+    # print("194")
 
     # Save the updated map to an HTML file
-    file_path = project_root / 'Datasets' / 'montreal_highlighted_map.html'
+    file_path = project_root / 'Datasets' / 'test_map.html'
     map_montreal.save(file_path)
 
 update_map(latitude, longitude)
