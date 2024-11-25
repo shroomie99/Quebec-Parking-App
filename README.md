@@ -48,4 +48,15 @@ Images of Application:
 3. Zoom-out map of parking coverage:
 ![image](https://github.com/user-attachments/assets/5d846468-f45a-4acf-8c68-a08f8897a4ec)
 
+Notes from Creator:
+- I've stopped working on this project due to time limitations. Feel free to improve the code or create another Montreal Parking application with it .
+- I put in a lot effort to take into account multiple factors to make the map on application be 70% reliable. Yet, my biggest issue is increasing the data realiability on the map to 90%.
+- Below I've laid out suggestions to increase the data reliability to be production-ready.
+
+Needed Improvements:
+Improve data quality. By:
+- In algorithm (in identify_regions_legal_to_park.py), algorithm is not cancelling signs accurately, resulting in overlapping signs. I generated code to visualize this issue but the mapping software (Folium) is generating 100MB files which is too large to open on .html.
+- I have not included signs with rule_type "pannonceau" and "unknown" from sign_description_RPA_parser.py into simplified_signalisation_stationnement.csv .
+- Source data limitations: Due to gbdouble.json not providing street coordinates in a directional pattern. Was forced to assume that the start coordinate on the left street, is the left corner of the street. 
+
 
