@@ -35,13 +35,17 @@ https://donnees.montreal.ca/dataset/stationnement-sur-rue-signalisation-courant
 2) Montreal street sides (Select only the CSV/JSON dataset):
 https://donnees.montreal.ca/dataset/geobase-double
 
+
+
 Images of Application:
 
-Welcome Page
+1. Welcome Page
 ![image](https://github.com/user-attachments/assets/7e6ce3af-cdc0-46b1-9013-ebd4a1df162c)
-Parking map Page:
+
+2. Parking map Page:
 ![image](https://github.com/user-attachments/assets/be804da0-ff40-4480-8806-1d596c5121cd)
-Zoom-out map of parking coverage:
+
+3. Zoom-out map of parking coverage:
 ![image](https://github.com/user-attachments/assets/5d846468-f45a-4acf-8c68-a08f8897a4ec)
 
 
